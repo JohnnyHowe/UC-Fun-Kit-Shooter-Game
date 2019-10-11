@@ -16,23 +16,29 @@ all: game.out
 
 
 # Compile: create object files from C source files.
-game.o: game.c ../../drivers/avr/system.h
+game.o: game.c ../../drivers/avr/system.h ../../drivers/avr/pio.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+pio.o: ../../drivers/avr/pio.c ../../drivers/avr/pio.h ../../drivers/avr/system.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 system.o: ../../drivers/avr/system.c ../../drivers/avr/system.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
+navswitch.o: ../../drivers/navswitch.c ../../drivers/avr/delay.h ../../drivers/avr/pio.h ../../drivers/avr/system.h ../../drivers/navswitch.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
 
 
 # Link: create ELF output file from object files.
-game.out: game.o system.o
+game.out: game.o system.o pio.o navswitch.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 
 
 # Target: clean project.
 .PHONY: clean
-clean: 
+clean:
 	-$(DEL) *.o *.out *.hex
 
 

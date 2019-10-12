@@ -16,10 +16,13 @@ all: game.out
 
 
 # Compile: create object files from C source files.
-game.o: game.c ../../drivers/avr/system.h ../../drivers/avr/pio.h player.h display.h
+game.o: game.c ../../drivers/avr/system.h ../../drivers/avr/pio.h player.h display.h shot.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-player.o: player.c player.h display.h ../../drivers/navswitch.h
+player.o: player.c player.h display.h ../../drivers/navswitch.h shot.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+shot.o: shot.c shot.h player.h display.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 display.o: display.c display.h ../../drivers/avr/pio.h ../../drivers/navswitch.h
@@ -37,7 +40,7 @@ navswitch.o: ../../drivers/navswitch.c ../../drivers/avr/delay.h ../../drivers/a
 
 
 # Link: create ELF output file from object files.
-game.out: game.o system.o pio.o navswitch.o player.o display.o
+game.out: game.o system.o pio.o navswitch.o player.o display.o shot.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 

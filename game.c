@@ -37,6 +37,12 @@ static void display_column (uint8_t row_pattern, uint8_t current_column)
         current_row ++;
     }
     last_col = current_column;
+
+    for (int i = 0; i < 5; i ++) {
+        pio_output_high(rows[i]);
+    }
+
+    pio_output_high(cols[last_col]);
 }
 
 

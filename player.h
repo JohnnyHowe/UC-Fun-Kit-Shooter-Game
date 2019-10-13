@@ -24,4 +24,4 @@ void player_shoot(Player* player);
 
 int can_shoot(Shot* shots, int numShots);
 
-void add_shot(Player* player, Shot shot);
+void receive_shot(Player* player);

@@ -21,4 +21,4 @@ void update_shots(Shot* shots, int numShots);
 
 int pos_to_transmit(Shot* shots, int num_shots);
 
-Shot receive_shot(void);
+Shot process_shot(void);

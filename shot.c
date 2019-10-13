@@ -60,7 +60,7 @@ int pos_to_transmit(Shot* shots, int num_shots)
 }
 
 
-Shot receive_shot(void)
+Shot process_shot(void)
 {
     /* If a value between 0 and 6 (inclusive) is received by the IR
      * sensor, use it as the x coordinate for a new shot, and return

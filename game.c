@@ -40,7 +40,7 @@ int main(void)
         if (shot_update_tick++ >= GAME_TICKS) {
             update_shots(player.shots, player.numShots);
             transmit_shot(player.shots, player.numShots);
-            add_shot(&player, receive_shot());
+            receive_shot(&player);
             shot_update_tick = 0;
         }
     }

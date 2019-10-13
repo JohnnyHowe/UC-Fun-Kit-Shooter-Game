@@ -1,7 +1,6 @@
 /** A bunch of helper functions for the player.
  * Includes: move_player, show_player
- * Jonathon Howe 12/10/2019
-*/
+ * Jonathon Howe 12/10/2019 */
 #include <avr/io.h> // Just for debugging things
 #include "player.h"
 #include "navswitch.h"
@@ -86,3 +85,18 @@ void show_player(Player* player)
     display_column(1 << player->xPos, 4);
 }
 
+
+void refresh_shots(Player* player)
+{
+    /* Remove the invalid shots (y > 4) and shuffle the valid ones down */
+    int i = 0;
+    int j = 0;
+    while (i < player->numShots) {
+        if (player->shots[i].yPos <= 4 && player->shots[i].yPos >= 0) {
+            player->shots[j] = player->shots[i];
+            j ++;
+        }
+        i ++;
+    }
+    player->numShots = j;
+}

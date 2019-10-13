@@ -41,6 +41,7 @@ int main(void)
             update_shots(player.shots, player.numShots);
             transmit_shot(player.shots, player.numShots);
             receive_shot(&player);
+            refresh_shots(&player);
             shot_update_tick = 0;
         }
     }

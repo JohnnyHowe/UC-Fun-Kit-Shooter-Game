@@ -1,12 +1,16 @@
 /**  A basic space fight game. Each player must shoot at the other
  * and dodge the oppenents shots.
  * Jonathon Howe 10/10/2019 */
+
 #include <avr/io.h>
 #include "pio.h"
 #include "navswitch.h"
 #include "player.h"
 #include "display.h"
 #include "pacer.h"
+#include "communication.h"
+
+
 
 #define REFRESH_RATE 1000
 #define GAME_TICKS (REFRESH_RATE / 6)   // How many loops must pass for the game to update?

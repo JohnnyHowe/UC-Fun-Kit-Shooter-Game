@@ -10,7 +10,7 @@ void initialise_ir(void)
 }
 
 
-void transmit(Shot* shots, int num_shots)
+void transmit_shot(Shot* shots, int num_shots)
 {
     /* Given an array of shots, if any are ready to be transmitted, do
      * just that */
@@ -23,12 +23,10 @@ void transmit(Shot* shots, int num_shots)
     }
 }
 
-int recieve(void)
+int receive_value(void)
 {
     /* Recieve and return the signal transmitted by the other ATMega32u2 */
-
     int x_pos = -1;
-
     if (ir_uart_read_ready_p()) {
         x_pos = ir_uart_getc();
     }

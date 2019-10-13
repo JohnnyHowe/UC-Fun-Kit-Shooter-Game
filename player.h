@@ -7,7 +7,7 @@
 typedef struct {
     /** Player struct, just holds the position right now */
     int xPos;
-    Shot shots[10];  // Max of 10 as that's the most that can fit on the screen
+    Shot shots[MAX_SHOTS];  // Max of 10 as that's the most that can fit on the screen
     int numShots;
 } Player;
 
@@ -23,3 +23,5 @@ Shot new_shot(Player* player);
 void player_shoot(Player* player);
 
 int can_shoot(Shot* shots, int numShots);
+
+void add_shot(Player* player, Shot shot);

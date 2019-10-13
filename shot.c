@@ -5,6 +5,7 @@
 #include "shot.h"
 #include "display.h"
 #include <avr/io.h> // Just for debugging things
+#include "communication.h"
 
 
 void show_shot(Shot* shot)
@@ -56,5 +57,19 @@ int pos_to_transmit(Shot* shots, int num_shots)
         i ++;
     }
     return x_pos;
+}
+
+
+Shot receive_shot(void)
+{
+    /* If a value between 0 and 6 (inclusive) is received by the IR
+     * sensor, use it as the x coordinate for a new shot, and return
+     * it. If not, return a shot with -1 x position. */
+    Shot shot = {-1, 0, -1};
+    int x_pos = receive_value();
+    if (x_pos >= 0 && x_pos <= 6) {
+        shot.xPos = 6 - x_pos;
+    }
+    return shot;
 }
 

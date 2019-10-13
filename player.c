@@ -67,6 +67,16 @@ int can_shoot(Shot* shots, int numShots)
 }
 
 
+void add_shot(Player* player, Shot shot)
+{
+    /* Add the given shot to the player's shot array. */
+    if (player->numShots < MAX_SHOTS) {
+        player->shots[player->numShots] = shot;
+        player->numShots ++;
+    }
+}
+
+
 void show_player(Player* player)
 {
     /** Given the pointer to a Player, light the LED in columm 4 and the

@@ -22,3 +22,15 @@ void transmit(Shot* shots, int num_shots)
         PORTC &= ~(1 << 2);
     }
 }
+
+int recieve(void)
+{
+    /* Recieve and return the signal transmitted by the other ATMega32u2 */
+
+    int x_pos = -1;
+
+    if (ir_uart_read_ready_p()) {
+        x_pos = ir_uart_getc();
+    }
+    return x_pos;
+}

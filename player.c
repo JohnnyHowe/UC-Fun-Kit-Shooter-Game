@@ -43,10 +43,27 @@ void player_shoot(Player* player)
 {
     /** Given a Player pointer, add a Shot to player.shots in the nav
      * button is pressed and the player has less than 10 shots. */
-    if (navswitch_push_event_p (NAVSWITCH_PUSH) && player->numShots < 10) {
+    if (navswitch_push_event_p(NAVSWITCH_PUSH) && can_shoot(player->shots, player->numShots)) {
         player->shots[player->numShots] = new_shot(player);
         player->numShots++;
     }
+}
+
+
+int can_shoot(Shot* shots, int numShots)
+{
+    /* Given an array of shots, check whether the player can shoot.
+     * so numShots < maxShots and the most recent outgoing shot is not
+     * in the first position (column 3) */
+    int shot_okay = 1;
+    int i = 0;
+    while (i < numShots && shot_okay) {
+        if (shots[i].direction > 0 && shots[i].yPos == 3) {
+            shot_okay = 0;
+        }
+        i ++;
+    }
+    return (shot_okay && numShots < MAX_SHOTS);
 }
 
 

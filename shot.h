@@ -1,11 +1,13 @@
 /** Shot struct and helper function definitions.
  * Jonathon Howe 12/10/2019 */
+#define MAX_SHOTS 10
 
 
 typedef struct {
     /** Player struct, just holds the position right now */
     int xPos;
     int yPos;
+    int direction;  // 1 = Towards player, -1 = away from player
 } Shot;
 
 

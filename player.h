@@ -21,3 +21,5 @@ void show_player(Player* player);
 Shot new_shot(Player* player);
 
 void player_shoot(Player* player);
+
+int can_shoot(Shot* shots, int numShots);

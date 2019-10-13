@@ -34,7 +34,7 @@ Shot new_shot(Player* player)
 {
     /** Given the pointer to the player that clicked the shoot button,
      * create a new shot at (player.xPos, 3) */
-    Shot shot = {player->xPos, 3};
+    Shot shot = {player->xPos, 3, 1};
     return shot;
 }
 

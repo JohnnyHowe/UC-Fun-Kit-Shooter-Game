@@ -29,7 +29,7 @@ void show_shots(Shot* shots, int numShots)
 void move_shot(Shot* shot)
 {
     /** Move the given shot (pointer) forward one unit. */
-    shot->yPos--;
+    shot->yPos -= shot->direction;
 };
 
 

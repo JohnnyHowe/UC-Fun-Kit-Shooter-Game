@@ -39,4 +39,22 @@ void update_shots(Shot* shots, int numShots)
     for (int i = 0; i < numShots; i++) {
         move_shot(&(shots[i]));
     }
-};
+}
+
+
+int pos_to_transmit(Shot* shots, int num_shots)
+{
+    /* Given an array of shots, if one is at y = 0 and it is outgoing,
+     * return its x position, if no shots exist, return -1 */
+    int x_pos = -1;
+    int i = 0;
+    while (i < num_shots && x_pos == -1)
+    {
+        if (shots[i].direction == 1 && shots[i].yPos == 0) {
+            x_pos = shots[i].xPos;
+        }
+        i ++;
+    }
+    return x_pos;
+}
+

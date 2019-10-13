@@ -18,3 +18,5 @@ void show_shots(Shot* shots, int numShots);
 void move_shot(Shot* shot);
 
 void update_shots(Shot* shots, int numShots);
+
+int pos_to_transmit(Shot* shots, int num_shots);

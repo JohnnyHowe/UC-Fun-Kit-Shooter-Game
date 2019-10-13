@@ -1,7 +1,6 @@
 /**  A basic space fight game. Each player must shoot at the other
  * and dodge the oppenents shots.
  * Jonathon Howe 10/10/2019 */
-
 #include <avr/io.h>
 #include "pio.h"
 #include "navswitch.h"
@@ -13,13 +12,15 @@
 
 
 #define REFRESH_RATE 1000
-#define GAME_TICKS (REFRESH_RATE / 6)   // How many loops must pass for the game to update?
+#define GAME_TICKS (REFRESH_RATE / 6)    // How many loops must pass for the game to update?
 
 int main(void)
 {
     system_init();
     initialise_display();
     navswitch_init();
+    initialise_ir();
+
     pacer_init(REFRESH_RATE);
     uint8_t shot_update_tick = 0;
 
@@ -29,7 +30,6 @@ int main(void)
 
     while (1) {
         pacer_wait();
-
         navswitch_update();
 
         move_player(&player);
@@ -39,7 +39,9 @@ int main(void)
 
         if (shot_update_tick++ >= GAME_TICKS) {
             update_shots(player.shots, player.numShots);
+            transmit(player.shots, player.numShots);
             shot_update_tick = 0;
+
         }
 
     }

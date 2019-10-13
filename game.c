@@ -6,26 +6,37 @@
 #include "navswitch.h"
 #include "player.h"
 #include "display.h"
+#include "pacer.h"
 
+#define REFRESH_RATE 60
+#define GAME_TICKS 6    // How many loops must pass for the game to update?
 
 int main(void)
 {
     system_init();
     initialise_display();
     navswitch_init();
+    pacer_init(REFRESH_RATE);
+    uint8_t shot_update_tick = 0;
 
     DDRC |= (1 << 2);
 
     Player player = new_player();
 
     while (1) {
+        pacer_wait();
+
         navswitch_update();
 
         move_player(&player);
         player_shoot(&player);
         show_player(&player);
-
-        update_shots(player.shots, player.numShots);
         show_shots(player.shots, player.numShots);
+
+        if (shot_update_tick++ >= GAME_TICKS) {
+            update_shots(player.shots, player.numShots);
+            shot_update_tick = 0;
+        }
+
     }
 }

@@ -17,9 +17,6 @@ void transmit_shot(Shot* shots, int num_shots)
     int x_pos = pos_to_transmit(shots, num_shots);
     if (x_pos != -1) {
         ir_uart_putc(x_pos);
-        PORTC |= (1 << 2);
-    } else {
-        PORTC &= ~(1 << 2);
     }
 }
 
@@ -29,6 +26,9 @@ int receive_value(void)
     int x_pos = -1;
     if (ir_uart_read_ready_p()) {
         x_pos = ir_uart_getc();
+        PORTC |= (1 << 2);
+    } else {
+        PORTC &= ~(1 << 2);
     }
     return x_pos;
 }

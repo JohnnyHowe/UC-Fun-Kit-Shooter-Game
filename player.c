@@ -21,10 +21,10 @@ void move_player(Player* player)
      * (pos) if the navswitch is pushed north or south repectively
      * if it will stay on screen (in range 0 to 6 (inclusive) */
 
-    if (navswitch_push_event_p (NAVSWITCH_SOUTH) && player->xPos < 6) {
-        player->xPos += 1;
-    } else if (navswitch_push_event_p (NAVSWITCH_NORTH) && player->xPos > 0) {
-        player->xPos -= 1;
+    if (navswitch_push_event_p (NAVSWITCH_SOUTH) && player->x_pos < 6) {
+        player->x_pos += 1;
+    } else if (navswitch_push_event_p (NAVSWITCH_NORTH) && player->x_pos > 0) {
+        player->x_pos -= 1;
     }
 };
 
@@ -32,8 +32,8 @@ void move_player(Player* player)
 Shot new_shot(Player* player)
 {
     /** Given the pointer to the player that clicked the shoot button,
-     * create a new shot at (player.xPos, 3) */
-    Shot shot = {player->xPos, 3, 1};
+     * create a new shot at (player.x_pos, 3) */
+    Shot shot = {player->x_pos, 3, 1};
     return shot;
 }
 
@@ -42,27 +42,27 @@ void player_shoot(Player* player)
 {
     /** Given a Player pointer, add a Shot to player.shots in the nav
      * button is pressed and the player has less than 10 shots. */
-    if (navswitch_push_event_p(NAVSWITCH_PUSH) && can_shoot(player->shots, player->numShots)) {
-        player->shots[player->numShots] = new_shot(player);
-        player->numShots++;
+    if (navswitch_push_event_p(NAVSWITCH_PUSH) && can_shoot(player->shots, player->num_shots)) {
+        player->shots[player->num_shots] = new_shot(player);
+        player->num_shots++;
     }
 }
 
 
-int can_shoot(Shot* shots, int numShots)
+int can_shoot(Shot* shots, int num_shots)
 {
     /* Given an array of shots, check whether the player can shoot.
-     * so numShots < maxShots and the most recent outgoing shot is not
-     * in the first position (column 3) */
+     * so num_shots < maxShots and the most recent outgoing shot is not
+     * in the first or second position (column 2 and 3) */
     int shot_okay = 1;
     int i = 0;
-    while (i < numShots && shot_okay) {
-        if (shots[i].direction > 0 && shots[i].yPos == 3) {
+    while (i < num_shots && shot_okay) {
+        if (shots[i].direction > 0 && (shots[i].y_pos == 3 || shots[i].y_pos == 2)) {
             shot_okay = 0;
         }
         i ++;
     }
-    return (shot_okay && numShots < MAX_SHOTS);
+    return (shot_okay && num_shots < MAX_SHOTS);
 }
 
 
@@ -71,9 +71,9 @@ void receive_shot(Player* player)
     /* If a shot is received from the IR sensor, add it to the
      * player.shot array. */
     Shot shot = process_shot();
-    if (player->numShots < MAX_SHOTS && shot.xPos != -1) {
-        player->shots[player->numShots] = shot;
-        player->numShots ++;
+    if (player->num_shots < MAX_SHOTS && shot.x_pos != -1) {
+        player->shots[player->num_shots] = shot;
+        player->num_shots ++;
     }
 }
 
@@ -82,7 +82,7 @@ void show_player(Player* player)
 {
     /** Given the pointer to a Player, light the LED in columm 4 and the
      * row corresponding to the player x pos (player.pos). */
-    display_column(1 << player->xPos, 4);
+    display_column(1 << player->x_pos, 4);
 }
 
 
@@ -91,12 +91,12 @@ void refresh_shots(Player* player)
     /* Remove the invalid shots (y > 4) and shuffle the valid ones down */
     int i = 0;
     int j = 0;
-    while (i < player->numShots) {
-        if (player->shots[i].yPos <= 4 && player->shots[i].yPos >= 0) {
+    while (i < player->num_shots) {
+        if (player->shots[i].y_pos <= 4 && player->shots[i].y_pos >= 0) {
             player->shots[j] = player->shots[i];
             j ++;
         }
         i ++;
     }
-    player->numShots = j;
+    player->num_shots = j;
 }

@@ -11,17 +11,17 @@
 void show_shot(Shot* shot)
 {
     /** Given a Shot pointer, show it if it is on the screen. */
-    if (shot->yPos >= 0 && shot->yPos <= 4) {
-        display_column(1 << shot->xPos, shot->yPos);
+    if (shot->y_pos >= 0 && shot->y_pos <= 4) {
+        display_column(1 << shot->x_pos, shot->y_pos);
     }
 };
 
 
-void show_shots(Shot* shots, int numShots)
+void show_shots(Shot* shots, int num_shots)
 {
     /** Given a (pointer to) an array of shots and the number of shots
      * in said array, show them all (run show_shot on them) */
-    for (int i = 0; i < numShots; i++) {
+    for (int i = 0; i < num_shots; i++) {
         show_shot(&shots[i]);
     }
 };
@@ -30,14 +30,14 @@ void show_shots(Shot* shots, int numShots)
 void move_shot(Shot* shot)
 {
     /** Move the given shot (pointer) forward one unit. */
-    shot->yPos -= shot->direction;
+    shot->y_pos -= shot->direction;
 };
 
 
-void update_shots(Shot* shots, int numShots)
+void update_shots(Shot* shots, int num_shots)
 {
     /** Update the array of shots given (move) */
-    for (int i = 0; i < numShots; i++) {
+    for (int i = 0; i < num_shots; i++) {
         move_shot(&(shots[i]));
     }
 }
@@ -51,8 +51,8 @@ int pos_to_transmit(Shot* shots, int num_shots)
     int i = 0;
     while (i < num_shots && x_pos == -1)
     {
-        if (shots[i].direction == 1 && shots[i].yPos == 0) {
-            x_pos = shots[i].xPos;
+        if (shots[i].direction == 1 && shots[i].y_pos == 0) {
+            x_pos = shots[i].x_pos;
         }
         i ++;
     }
@@ -68,7 +68,7 @@ Shot process_shot(void)
     Shot shot = {-1, 0, -1};
     int x_pos = receive_value();
     if (x_pos >= 0 && x_pos <= 6) {
-        shot.xPos = 6 - x_pos;
+        shot.x_pos = 6 - x_pos;
     }
     return shot;
 }

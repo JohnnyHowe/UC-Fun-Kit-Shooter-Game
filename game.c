@@ -10,7 +10,6 @@
 #include "communication.h"
 
 
-
 #define REFRESH_RATE 1000
 #define GAME_TICKS (REFRESH_RATE / 6)    // How many loops must pass for the game to update?
 
@@ -35,11 +34,11 @@ int main(void)
         move_player(&player);
         player_shoot(&player);
         show_player(&player);
-        show_shots(player.shots, player.numShots);
+        show_shots(player.shots, player.num_shots);
 
         if (shot_update_tick++ >= GAME_TICKS) {
-            update_shots(player.shots, player.numShots);
-            transmit_shot(player.shots, player.numShots);
+            update_shots(player.shots, player.num_shots);
+            transmit_shot(player.shots, player.num_shots);
             receive_shot(&player);
             refresh_shots(&player);
             shot_update_tick = 0;

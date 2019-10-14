@@ -5,19 +5,19 @@
 
 typedef struct {
     /** Player struct, just holds the position right now */
-    int xPos;
-    int yPos;
+    int x_pos;
+    int y_pos;
     int direction;  // 1 = Towards player, -1 = away from player
 } Shot;
 
 
 void show_shot(Shot* shot);
 
-void show_shots(Shot* shots, int numShots);
+void show_shots(Shot* shots, int num_shots);
 
 void move_shot(Shot* shot);
 
-void update_shots(Shot* shots, int numShots);
+void update_shots(Shot* shots, int num_shots);
 
 int pos_to_transmit(Shot* shots, int num_shots);
 

@@ -11,26 +11,28 @@ How to play "Shooty Shooty Bang Bang™"
 3. If the game does not start immediately, bring both kits closer together.
 
 =====================================
+              Gameplay
+=====================================
+
+4. There is a maximum speed each player can shoot.
+
+5. The players are only able to move along the x-axis on columns 1 through 5.
+
+=====================================
           Playing the game
 =====================================
 
-4. Objective of the game is to hit the other player with the shots you fire by pressing down on the navswitch or 
+6. Objective of the game is to hit the other player with the shots you fire by pressing down on the navswitch or 
 pressing the white button on the right side of the LED board.
 
-5. Once a player is hit, the updated score is displayed on both boards for 1 second.
+7. Once a player is hit, the updated score is displayed on both boards for 1 second.
 
 =====================================
               Scoring
 =====================================
 
-6. Each hit a player gets on the other player will add 1 to their score.
+8. Each hit a player gets on the other player will add 1 to their score.
 
-7. There is no max score but after a player goes over the score of 9, the score will loop back down to 0.
+9. There is no max score but after a player goes over the score of 9, the score will loop back down to 0.
 
-=====================================
-              Gameplay
-=====================================
 
-8. There is a maximum speed each player can shoot.
-
-9. The players are only able to move along the x-axis on columns 1 through 5.

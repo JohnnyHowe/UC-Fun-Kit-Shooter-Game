@@ -1,6 +1,6 @@
 /** Shot struct and helper function definitions.
  * Jonathon Howe 12/10/2019 */
-#define MAX_SHOTS 10
+#define MAX_SHOTS 14
 
 
 typedef struct {

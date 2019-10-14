@@ -21,9 +21,9 @@ void move_player(Player* player)
      * (pos) if the navswitch is pushed north or south repectively
      * if it will stay on screen (in range 0 to 6 (inclusive) */
 
-    if (navswitch_push_event_p (NAVSWITCH_SOUTH) && player->x_pos < 6) {
+    if (navswitch_push_event_p (NAVSWITCH_EAST) && player->x_pos < 4) {
         player->x_pos += 1;
-    } else if (navswitch_push_event_p (NAVSWITCH_NORTH) && player->x_pos > 0) {
+    } else if (navswitch_push_event_p (NAVSWITCH_WEST) && player->x_pos > 0) {
         player->x_pos -= 1;
     }
 };
@@ -33,7 +33,7 @@ Shot new_shot(Player* player)
 {
     /** Given the pointer to the player that clicked the shoot button,
      * create a new shot at (player.x_pos, 3) */
-    Shot shot = {player->x_pos, 3, 1};
+    Shot shot = {player->x_pos, 1, 1};
     return shot;
 }
 
@@ -82,17 +82,18 @@ void show_player(Player* player)
 {
     /** Given the pointer to a Player, light the LED in columm 4 and the
      * row corresponding to the player x pos (player.pos). */
-    display_column(1 << player->x_pos, 4);
+    display_column(1, player->x_pos);
 }
 
 
 void refresh_shots(Player* player)
 {
     /* Remove the invalid shots (y > 4) and shuffle the valid ones down */
+    //shot_collision(player);
     int i = 0;
     int j = 0;
     while (i < player->num_shots) {
-        if (player->shots[i].y_pos <= 4 && player->shots[i].y_pos >= 0) {
+        if (player->shots[i].y_pos <= 6 && player->shots[i].y_pos >= 0) {
             player->shots[j] = player->shots[i];
             j ++;
         }
@@ -100,3 +101,34 @@ void refresh_shots(Player* player)
     }
     player->num_shots = j;
 }
+
+
+void shot_collision(Player* player)
+{
+    /** If two shots have collided, set their y_pos to -1 and their
+     * direction to 0 so the refresh_shots function gets rid
+     * of them.
+     * FUNCTION IS NASTY PLEASE MAKE MORE EFFICIENT */
+    int i = 0;
+    int j = 0;
+    while (i < player->num_shots) {
+        while (j < player->num_shots) {
+            if (player->shots[i].direction + player->shots[j].direction == 0) {
+                if (player->shots[i].x_pos == player->shots[j].x_pos) {
+                    if (player->shots[i].y_pos == player->shots[j].y_pos ||
+                    player->shots[i].y_pos == player->shots[j].y_pos + 1 ||
+                    player->shots[i].y_pos == player->shots[j].y_pos - 1) {
+                        // they have collided
+                        player->shots[i].y_pos = -1;
+                        player->shots[i].direction = 0;
+                        player->shots[j].y_pos = -1;
+                        player->shots[j].direction = 0;
+                    }
+                }
+            }
+            j++;
+        }
+        i++;
+    }
+}
+

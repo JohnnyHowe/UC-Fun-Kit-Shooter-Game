@@ -1,0 +1,38 @@
+How to play "Shooty Shooty Bang Bang™"
+
+=====================================
+             Start-Up
+=====================================
+
+1. Plug kits into computer. If the green LED lights up, it has been plugged in.
+
+2. Run the "make program" command and the centre LED should start flashing.
+
+3. If the game does not start immediately, bring both kits closer together.
+
+=====================================
+              Gameplay
+=====================================
+
+4. There is a maximum speed each player can shoot.
+
+5. The players are only able to move along the x-axis on columns 1 through 5.
+
+=====================================
+          Playing the game
+=====================================
+
+6. Objective of the game is to hit the other player with the shots you fire by pressing down on the navswitch or 
+pressing the white button on the right side of the LED board.
+
+7. Once a player is hit, the updated score is displayed on both boards for 1 second.
+
+=====================================
+              Scoring
+=====================================
+
+8. Each hit a player gets on the other player will add 1 to their score.
+
+9. There is no max score but after a player goes over the score of 9, the score will loop back down to 0.
+
+

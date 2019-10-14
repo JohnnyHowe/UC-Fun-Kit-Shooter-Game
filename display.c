@@ -1,6 +1,6 @@
 /** Display helper functions.
  * Includes: display_column, initialise_display
- * Jonathon Howe 12/10/2019
+ * Jonathon Howe, Tomoya Sakai 12/10/2019
 */
 #include "navswitch.h"
 #include "pio.h"
@@ -11,7 +11,8 @@ void display_column (uint8_t row_pattern, uint8_t current_column)
 {
     /** Set the pattern on the LED matrix in column current_column (int
      * in range 0 to 4 (inclusive)) to row_pattern (integer that in
-     * binary represents the LED pattern. */
+     * binary represents the LED pattern.
+     * Parameters */
 
     static int last_col = 0;
     pio_output_high(cols[last_col]);
@@ -40,6 +41,7 @@ void display_column (uint8_t row_pattern, uint8_t current_column)
 void initialise_display(void)
 {
     /** Initialise all rows and columns of the LED matrix display */
+
     for (int col = 0; col < 5; col ++) {
         pio_config_set(cols[col], PIO_OUTPUT_HIGH);
     }

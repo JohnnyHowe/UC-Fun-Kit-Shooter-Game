@@ -1,3 +1,7 @@
+/** Functions to help with communications between the two devices.
+ * Includes: initialise_ir, transmit_shot, receive_value
+ * Jonathon Howe, Tomoya Sakai 14/10/2019
+ */
 #include "shot.h"
 #include "communication.h"
 #include <stdlib.h>

@@ -16,7 +16,26 @@
 
 #define REFRESH_RATE 500
 #define GAME_TICKS 100
-#define RECEIVE_TICKS (GAME_TICKS / 2)
+#define RECEIVE_TICKS (GAME_TICKS / 4)
+
+
+void reset(Player* player)
+{
+    player->num_shots = 0;
+    player->x_pos = 2;
+    clear_display();
+}
+
+
+void display_score(int score)
+{
+    int i = 0;
+    display_character(score + 0 + '0');
+    while (i++ < 500) {
+        pacer_wait();
+        tinygl_update();
+    }
+}
 
 
 void initialise_everything(void)
@@ -28,35 +47,38 @@ void initialise_everything(void)
 
     tinygl_init(REFRESH_RATE);
     tinygl_font_set(&font5x7_1);
-    tinygl_text_speed_set(1);
+    //tinygl_text_speed_set(1);
+    DDRC |= (1 << 2);
+    DDRD &= ~(1 << 7);
+    //tinygl_text_dir_set(TINYGL
 }
 
 
 void show_player_number(int player_number)
 {
+    display_character('0' + player_number);
+    tinygl_update();
     for (uint16_t i = 0; i < REFRESH_RATE * 5; i++) {
-        display_character('0' + player_number);
+        //display_character('0' + player_number);
         pacer_wait();
-        tinygl_update ();
+        //tinygl_update ();
     }
     clear_display();
 }
 
 
-static void update_game(Player* player)
+static void update_game(Player* player, int player_number, int score)
 {
     static uint16_t shot_update_tick = 0;
     if (shot_update_tick++ >= GAME_TICKS) {
-        //shot_collision(&player);
         update_shots(player->shots, player->num_shots);
         refresh_shots(player);
 
         if (is_hit(player)) {
-            PORTC |= (1 << 2);
-        } else {
-            PORTC &= ~(1 << 2);
-        };
-
+            transmit_hit(player_number);
+            display_score(score);
+            reset(player);
+        }
         shot_update_tick = 0;
     }
 }
@@ -72,12 +94,25 @@ static void transmit(Player* player, int player_number)
 }
 
 
-static void receive(Player* player, int player_number)
+static void receive(Player* player, int player_number, int* score)
 {
-    static uint16_t receive_tick = 0;
+    static uint16_t receive_tick = (RECEIVE_TICKS / 2);
+    PORTC &= ~(1 << 2);
     if (receive_tick++ >= RECEIVE_TICKS) {
-        receive_shot(player, player_number);
-        receive_tick = 0;
+
+        int value = receive_value();
+        if (value != -1) {
+            uint8_t message = value;
+            if (check_bit(message, 5) == 1) {
+                (*score) ++;
+                PORTC |= (1 << 2);
+                display_score(*score);
+                reset(player);
+            } else {
+                receive_shot(player, player_number, message);
+            }
+            receive_tick = 0;
+        }
     }
 }
 
@@ -85,13 +120,16 @@ static void receive(Player* player, int player_number)
 int main(void)
 {
     initialise_everything();
-    DDRC |= (1 << 2);
 
     int player_number = get_player_number();
+    int score = 0;
+
     pacer_init(REFRESH_RATE);
-    show_player_number(player_number);
+    // show_player_number(player_number);
+    // display_score(score);
 
     Player player = new_player();
+    reset(&player);
 
     while (1) {
         pacer_wait();
@@ -101,7 +139,7 @@ int main(void)
         show_shots(player.shots, player.num_shots);
 
         transmit(&player, player_number);
-        receive(&player, player_number);
-        update_game(&player);
+        receive(&player, player_number, &score);
+        update_game(&player, player_number, score);
     }
 }

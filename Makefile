@@ -19,7 +19,7 @@ all: game.out
 game.o: game.c ../../drivers/avr/pio.h player.h communication.h ../../utils/font.h ../../utils/tinygl.h ../../utils/pacer.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-player.o: player.c player.h game_display.h ../../drivers/navswitch.h shot.h
+player.o: player.c player.h game_display.h ../../drivers/navswitch.h shot.h ../../drivers/avr/ir_uart.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 shot.o: shot.c shot.h game_display.h

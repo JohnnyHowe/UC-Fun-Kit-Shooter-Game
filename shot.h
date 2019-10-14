@@ -24,6 +24,6 @@ void update_shots(Shot* shots, int num_shots);
 
 int pos_to_transmit(Shot* shots, int num_shots);
 
-Shot process_shot(int player_number);
+Shot process_shot(int player_number, uint8_t message);
 
 void set_null_shot(Shot* shot);

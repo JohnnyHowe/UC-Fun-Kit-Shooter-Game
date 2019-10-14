@@ -78,13 +78,12 @@ int pos_to_transmit(Shot* shots, int num_shots)
 }
 
 
-Shot process_shot(int player_number)
+Shot process_shot(int player_number, uint8_t message)
 {
     /* If a value between 0 and 6 (inclusive) is received by the IR
      * sensor, use it as the x coordinate for a new shot, and return
      * it. If not, return a shot with -1 x position. */
     Shot shot = {-1, 6, -1};
-    int message = receive_value();
     int incoming_player_num = check_bit(message, 7);
     message &= ~(1 << 7);
     int x_pos = message;

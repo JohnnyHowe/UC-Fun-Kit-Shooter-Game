@@ -6,6 +6,7 @@
 #include "player.h"
 #include "navswitch.h"
 #include "game_display.h"
+#include "ir_uart.h"
 
 
 Player new_player(void)
@@ -61,11 +62,18 @@ Shot new_shot(Player* player)
 }
 
 
+int shoot_button(void)
+{
+    return ((PIND & (1 << 7)) != 0) || navswitch_push_event_p(NAVSWITCH_PUSH);
+}
+
+
 void player_shoot(Player* player)
 {
     /** Given a Player pointer, add a Shot to player.shots in the nav
      * button is pressed and the player has less than 10 shots. */
-    if (navswitch_push_event_p(NAVSWITCH_PUSH) && can_shoot(player->shots, player->num_shots)) {
+    //if (navswitch_push_event_p(NAVSWITCH_PUSH) && can_shoot(player->shots, player->num_shots)) {
+    if (shoot_button() && can_shoot(player->shots, player->num_shots)) {
         player->shots[player->num_shots] = new_shot(player);
         player->num_shots++;
     }
@@ -80,7 +88,7 @@ int can_shoot(Shot* shots, int num_shots)
     int shot_okay = 1;
     int i = 0;
     while (i < num_shots && shot_okay) {
-        if (shots[i].direction > 0 && (shots[i].y_pos == 1 || shots[i].y_pos == 2)) {
+        if (shots[i].direction > 0 && shots[i].y_pos <= 3) {
             shot_okay = 0;
         }
         i ++;
@@ -89,11 +97,11 @@ int can_shoot(Shot* shots, int num_shots)
 }
 
 
-void receive_shot(Player* player, int player_number)
+void receive_shot(Player* player, int player_number, uint8_t message)
 {
     /* If a shot is received from the IR sensor, add it to the
      * player.shot array. */
-    Shot shot = process_shot(player_number);
+    Shot shot = process_shot(player_number, message);
     if (player->num_shots < MAX_SHOTS && shot.x_pos != -1) {
         player->shots[player->num_shots] = shot;
         player->num_shots ++;
@@ -166,3 +174,11 @@ int shots_collided(Shot* shot1, Shot* shot2)
     return collided;
 }
 
+
+void transmit_hit(int player_number)
+{
+    uint8_t message = 0;
+    message |= (player_number << 7);
+    message |= (1 << 5);
+    ir_uart_putc(message);
+}

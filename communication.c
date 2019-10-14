@@ -39,12 +39,9 @@ int receive_value(void)
     /** Return (int) the x position of the incoming shot transmitted by
      * the other player. This function (calls another function to)
      * properly decode the message. */
-    uint8_t message = -1;
+    int message = -1;
     if (ir_uart_read_ready_p()) {
         message = ir_uart_getc();
-        // PORTC |= (1 << 2);
-    } else {
-        //PORTC &= ~(1 << 2);
     }
     return message;
 }

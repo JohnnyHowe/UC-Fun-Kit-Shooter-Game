@@ -24,7 +24,7 @@ void player_shoot(Player* player);
 
 int can_shoot(Shot* shots, int num_shots);
 
-void receive_shot(Player* player, int player_number);
+void receive_shot(Player* player, int player_number, uint8_t message);
 
 void refresh_shots(Player* player);
 
@@ -35,3 +35,5 @@ int shots_collided(Shot* shot1, Shot* shot2);
 void update_player(Player* player);
 
 int is_hit(Player* player);
+
+void transmit_hit(int player_number);

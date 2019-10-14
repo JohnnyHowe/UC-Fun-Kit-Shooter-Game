@@ -27,3 +27,5 @@ int can_shoot(Shot* shots, int num_shots);
 void receive_shot(Player* player);
 
 void refresh_shots(Player* player);
+
+void shot_collision(Player* player);

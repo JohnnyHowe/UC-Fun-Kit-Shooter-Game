@@ -11,8 +11,8 @@
 void show_shot(Shot* shot)
 {
     /** Given a Shot pointer, show it if it is on the screen. */
-    if (shot->y_pos >= 0 && shot->y_pos <= 4) {
-        display_column(1 << shot->x_pos, shot->y_pos);
+    if (shot->y_pos >= 0 && shot->y_pos <= 6) {
+        display_column(1 << shot->y_pos, shot->x_pos);
     }
 };
 
@@ -30,7 +30,7 @@ void show_shots(Shot* shots, int num_shots)
 void move_shot(Shot* shot)
 {
     /** Move the given shot (pointer) forward one unit. */
-    shot->y_pos -= shot->direction;
+    shot->y_pos += shot->direction;
 };
 
 
@@ -45,7 +45,7 @@ void update_shots(Shot* shots, int num_shots)
 
 int pos_to_transmit(Shot* shots, int num_shots)
 {
-    /* Given an array of shots, if one is at y = 0 and it is outgoing,
+    /** Given an array of shots, if one is at y = 0 and it is outgoing,
      * return its x position, if no shots exist, return -1 */
     int x_pos = -1;
     int i = 0;
@@ -65,11 +65,10 @@ Shot process_shot(void)
     /* If a value between 0 and 6 (inclusive) is received by the IR
      * sensor, use it as the x coordinate for a new shot, and return
      * it. If not, return a shot with -1 x position. */
-    Shot shot = {-1, 0, -1};
+    Shot shot = {-1, 6, -1};
     int x_pos = receive_value();
-    if (x_pos >= 0 && x_pos <= 6) {
-        shot.x_pos = 6 - x_pos;
+    if (x_pos >= 0 && x_pos <= 4) {
+        shot.x_pos = 4 - x_pos;
     }
     return shot;
 }
-

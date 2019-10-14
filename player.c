@@ -1,17 +1,20 @@
 /** A bunch of helper functions for the player.
  * Jonathon Howe, Tomoya Sakai 12/10/2019 */
-#include <avr/io.h> // Just for debugging things
+#include <avr/io.h>
 #include <stdlib.h>
 #include "player.h"
 #include "navswitch.h"
 #include "game_display.h"
 #include "ir_uart.h"
+#include "communication.h"
+
+#define SHOT_COOLDOWN 3 // Number of game ticks between shots
 
 
 Player new_player(void)
 {
     /** Return a new Player with the default attribute values. (2, {}, 0)*/
-    Player player = {2, {}, 0};
+    Player player = {GAME_WIDTH / 2, {}, 0};
     return player;
 }
 
@@ -48,7 +51,7 @@ void move_player(Player* player)
     /** Move the player if the navswitch is pushed east or west.
      * player (Player*): Pointer to player to move. */
 
-    if (navswitch_push_event_p (NAVSWITCH_EAST) && player->x_pos < 4) {
+    if (navswitch_push_event_p (NAVSWITCH_EAST) && player->x_pos < GAME_WIDTH - 1) {
         player->x_pos += 1;
     } else if (navswitch_push_event_p (NAVSWITCH_WEST) && player->x_pos > 0) {
         player->x_pos -= 1;
@@ -96,7 +99,7 @@ int can_shoot(Shot* shots, int num_shots)
     int shot_okay = 1;
     int i = 0;
     while (i < num_shots && shot_okay) {
-        if (shots[i].direction > 0 && shots[i].y_pos <= 3) {
+        if (shots[i].direction > 0 && shots[i].y_pos <= SHOT_COOLDOWN) {
             shot_okay = 0;
         }
         i ++;
@@ -135,7 +138,7 @@ void refresh_shots(Player* player)
     int i = 0;
     int j = 0;
     while (i < player->num_shots) {
-        if (player->shots[i].y_pos <= 6 && player->shots[i].y_pos >= 0) {
+        if (player->shots[i].y_pos <= GAME_HEIGHT - 1 && player->shots[i].y_pos >= 0) {
             player->shots[j] = player->shots[i];
             j ++;
         }
@@ -147,10 +150,10 @@ void refresh_shots(Player* player)
 
 void transmit_hit(int player_number)
 {
-    /** Transmit a signal with bit 5 active (saying i've been hit).
+    /** Transmit a signal with bit HIT_BIT active (saying i've been hit).
      * player_number (int): Unit/player number. */
     uint8_t message = 0;
-    message |= (player_number << 7);
-    message |= (1 << 5);
+    message |= (player_number << SIGNATURE_BIT);
+    message |= (1 << HIT_BIT);
     ir_uart_putc(message);
 }

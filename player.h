@@ -1,20 +1,16 @@
 /** Functions to help with player movement and shooting.
  * Also includes the Player struct definition.
  * Full docstrings for the functions are in the player.c file.
- * Jonathon Howe, Tomoya Sakai 12/10/2019
-*/
-
+ * Jonathon Howe, Tomoya Sakai 12/10/2019 */
 #include "shot.h"
 
 /** Player struct definition which holds the x-axis position, the array of shots that the player has made,
- * and how many shots the player has made.
- */
+ * and how many shots the player has made. */
 typedef struct {
     int x_pos;
-    Shot shots[MAX_SHOTS];  
+    Shot shots[MAX_SHOTS];
     int num_shots;
 } Player;
-
 
 Player new_player(void);
 

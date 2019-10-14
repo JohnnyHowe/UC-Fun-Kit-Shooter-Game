@@ -1,22 +1,20 @@
 /**  A basic space fight game. Each player must shoot at the other
  * and dodge the oppenents shots.
  * Jonathon Howe, Tomoya Sakai 10/10/2019 */
-
 #include <avr/io.h>
 #include "pio.h"
 #include "navswitch.h"
 #include "../fonts/font5x7_1.h"
 #include "../../utils/tinygl.h"
 #include "../../utils/pacer.h"
-
 #include "communication.h"
 #include "player.h"
 #include "game_display.h"
 
-
 #define REFRESH_RATE 500
 #define GAME_TICKS 100
 #define RECEIVE_TICKS (GAME_TICKS / 4)
+#define MAX_SCORE 9
 
 
 void reset(Player* player)
@@ -65,6 +63,7 @@ static void update_game(Player* player, int player_number, int score)
      * player_number (int): The units player number (0 or 1).
      * score (int): Player score to display (if other player is hit). */
     static uint16_t shot_update_tick = 0;
+    update_player(player);
     if (shot_update_tick++ >= GAME_TICKS) {
         update_shots(player->shots, player->num_shots);
         refresh_shots(player);
@@ -104,12 +103,11 @@ static void receive(Player* player, int player_number, int* score)
     static uint16_t receive_tick = (RECEIVE_TICKS / 2);
     PORTC &= ~(1 << 2);
     if (receive_tick++ >= RECEIVE_TICKS) {
-
         int value = receive_value();
         if (value != -1) {
             uint8_t message = value;
-            if (check_bit(message, 5) == 1) {
-                *score = (*score + 1) % 10;
+            if (check_bit(message, HIT_BIT) == 1) {
+                *score = (*score + 1) % (MAX_SCORE + 1);
                 display_score(*score);
                 reset(player);
             } else {
@@ -131,7 +129,6 @@ int main(void)
     int score = 0;
 
     pacer_init(REFRESH_RATE);
-    // show_player_number(player_number);
 
     Player player = new_player();
     reset(&player);
@@ -140,9 +137,7 @@ int main(void)
         pacer_wait();
         navswitch_update();
 
-        update_player(&player);
         show_shots(player.shots, player.num_shots);
-
         transmit(&player, player_number);
         receive(&player, player_number, &score);
         update_game(&player, player_number, score);

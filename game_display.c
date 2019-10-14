@@ -1,10 +1,8 @@
 /** Display helper functions.
- * Jonathon Howe, Tomoya Sakai 12/10/2019
-*/
+ * Jonathon Howe, Tomoya Sakai 12/10/2019 */
 #include "navswitch.h"
 #include "game_display.h"
 #include "tinygl.h"
-
 
 
 void display_character (char character)
@@ -31,7 +29,7 @@ void display_column (uint8_t row_pattern, uint8_t current_column)
     pio_output_low(cols[current_column]);
     int current_row = 0;
 
-    while (current_row < 7) {
+    while (current_row < NUM_OF_ROWS) {
         if ((row_pattern >> current_row) & 1) {
             pio_output_low(rows[current_row]);
         } else {
@@ -41,7 +39,7 @@ void display_column (uint8_t row_pattern, uint8_t current_column)
     }
     last_col = current_column;
 
-    for (int i = 0; i < 7; i ++) {
+    for (int i = 0; i < NUM_OF_ROWS; i ++) {
         pio_output_high(rows[i]);
     }
 
@@ -53,10 +51,10 @@ void initialise_display(void)
 {
     /** Initialise all rows and columns of the LED matrix display */
 
-    for (int col = 0; col < 5; col ++) {
+    for (int col = 0; col < GAME_WIDTH; col ++) {
         pio_config_set(cols[col], PIO_OUTPUT_HIGH);
     }
-    for (int row = 0; row < 7; row ++) {
+    for (int row = 0; row < GAME_HEIGHT; row ++) {
         pio_config_set(rows[row], PIO_OUTPUT_HIGH);
     }
 }
@@ -65,10 +63,10 @@ void initialise_display(void)
 void clear_display(void)
 {
     /** Turn all rows and columns of the LED matrix to high */
-    for (int i = 0; i <= 4; i++) {
+    for (int i = 0; i < GAME_WIDTH; i++) {
         pio_output_high(cols[i]);
     }
-    for (int j = 0; j <= 6; j++) {
+    for (int j = 0; j < GAME_HEIGHT; j++) {
         pio_output_high(rows[j]);
     }
 }

@@ -12,14 +12,13 @@
 #include "ir_uart.h"
 #include "pacer.h"
 #include "tinygl.h"
-
 #include "game_display.h"
 #include "communication.h"
 
 #define I_AM_PLAYER_ZERO 0b1000000
 #define I_AM_PLAYER_ONE 0b0100000
 #define PLAYER_CONFIRMED 0b11000000
-
+#define PLAYER_NUMBER_LOOP_RATE 20
 
 
 void initialise_ir(void)
@@ -62,7 +61,7 @@ int get_player_number(void)
      * decides what unit is player 0 and player 1. */
     int player_num = 2;
     int done = 0;
-    pacer_init(20);
+    pacer_init(PLAYER_NUMBER_LOOP_RATE);
 
     while (!done) {
         pacer_wait();
@@ -82,7 +81,7 @@ int get_player_number(void)
                 player_num = 1;
 
                 int i = 0;
-                while (i++ < 20) {
+                while (i++ < PLAYER_NUMBER_LOOP_RATE) {
                     ir_uart_putc(PLAYER_CONFIRMED);
                     PORTC |= (1 << 2);
                     pacer_wait();

@@ -1,8 +1,6 @@
 /** A bunch of helper functions for the shot struct thing.
- * Jonathon Howe, Tomoya Sakai 12/10/2019
-*/
-#include <avr/io.h> // Just for debugging things
-
+ * Jonathon Howe, Tomoya Sakai 12/10/2019 */
+#include <avr/io.h>
 #include "shot.h"
 #include "game_display.h"
 #include "ir_uart.h"
@@ -19,7 +17,7 @@ void transmit_shot(Shot* shots, int num_shots, int player_number)
     int x_pos = pos_to_transmit(shots, num_shots);
     if (x_pos != -1) {
         uint8_t message = x_pos;
-        message |= (player_number << 7);
+        message |= (player_number << SIGNATURE_BIT);
         ir_uart_putc(message);
     }
 }
@@ -29,7 +27,7 @@ void show_shot(Shot* shot)
 {
     /** Show a single shot on the LED matrix..
      * shot (Shot*): pointer to shot to show. */
-    if (shot->y_pos >= 0 && shot->y_pos <= 6) {
+    if (shot->y_pos >= 0 && shot->y_pos < GAME_HEIGHT) {
         display_column(1 << shot->y_pos, shot->x_pos);
     }
 };
@@ -75,7 +73,7 @@ int pos_to_transmit(Shot* shots, int num_shots)
     int i = 0;
     while (i < num_shots && x_pos == -1)
     {
-        if (shots[i].direction == 1 && shots[i].y_pos == 6) {
+        if (shots[i].direction == 1 && shots[i].y_pos == GAME_HEIGHT - 1) {
             x_pos = shots[i].x_pos;
         }
         i ++;
@@ -92,12 +90,12 @@ Shot process_shot(int player_number, uint8_t message)
      * player_number (int): Receiving player/unit number.
      * message (uint8_t): Incoming binary message. */
     Shot shot = {-1, 6, -1};
-    int incoming_player_num = check_bit(message, 7);
-    message &= ~(1 << 7);
+    int incoming_player_num = check_bit(message, SIGNATURE_BIT);
+    message &= ~(1 << SIGNATURE_BIT);
     int x_pos = message;
 
-    if (x_pos >= 0 && x_pos <= 4 && incoming_player_num != player_number) {
-        shot.x_pos = 4 - x_pos;
+    if (x_pos >= 0 && x_pos < GAME_WIDTH && incoming_player_num != player_number) {
+        shot.x_pos = GAME_WIDTH - x_pos - 1;
     }
     return shot;
 }

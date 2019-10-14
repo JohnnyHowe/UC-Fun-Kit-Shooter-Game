@@ -1,5 +1,7 @@
 /** Display functions and rows and cols array definitions.
- * Jonathon Howe 12/10/2019 */
+ * Full docstrings are in the game_display.c file.
+ * Jonathon Howe, Tomoya Sakai 12/10/2019
+*/
 #include "pio.h"
 
 

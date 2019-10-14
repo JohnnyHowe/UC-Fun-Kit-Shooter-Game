@@ -1,16 +1,17 @@
-/** Shot struct and helper function definitions.
- * Jonathon Howe 12/10/2019 */
+/** Functions to help with processing shots.
+ * Also includes the Shot struct definition
+ * Jonathon Howe, Tomoya Sakai 12/10/2019 */
 #define MAX_SHOTS 14
 
 
+/** Shot struct definition which holds but the x and y position of each shot,
+ * as well as the direction that the shot is going, 1 for going away from player, -1 for coming towards.
+*/
 typedef struct {
-    /** Player struct, just holds the position right now */
     int x_pos;
     int y_pos;
-    int direction;  // 1 = Towards player, -1 = away from player
+    int direction;
 } Shot;
-
-// Shot NULL_SHOT = {-1, -1, 0};
 
 void transmit_shot(Shot* shots, int num_shots, int player_number);
 

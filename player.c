@@ -1,5 +1,5 @@
 /** A bunch of helper functions for the player.
- * Jonathon Howe 12/10/2019 */
+ * Jonathon Howe, Tomoya Sakai 12/10/2019 */
 #include <avr/io.h> // Just for debugging things
 #include <stdlib.h>
 #include "player.h"

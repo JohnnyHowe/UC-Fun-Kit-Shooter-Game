@@ -18,7 +18,8 @@
 #define GAME_TICKS 100
 #define RECEIVE_TICKS (GAME_TICKS / 2)
 
-int main(void)
+
+void initialise_everything(void)
 {
     system_init();
     initialise_ir();
@@ -28,24 +29,60 @@ int main(void)
     tinygl_init(REFRESH_RATE);
     tinygl_font_set(&font5x7_1);
     tinygl_text_speed_set(1);
+}
 
-    DDRC |= (1 << 2);
 
-    int player_number = get_player_number();
-
-    pacer_init(REFRESH_RATE);
-
+void show_player_number(int player_number)
+{
     for (uint16_t i = 0; i < REFRESH_RATE * 5; i++) {
         display_character('0' + player_number);
-        pacer_wait ();
+        pacer_wait();
         tinygl_update ();
     }
     clear_display();
+}
 
 
-    uint16_t shot_update_tick = 0;
-    uint16_t transmit_tick = 0;
-    uint16_t receive_tick = 0;
+static void update_game(Player* player)
+{
+    static uint16_t shot_update_tick = 0;
+    if (shot_update_tick++ >= GAME_TICKS) {
+        //shot_collision(&player);
+        update_shots(player->shots, player->num_shots);
+        refresh_shots(player);
+        shot_update_tick = 0;
+    }
+}
+
+
+static void transmit(Player* player, int player_number)
+{
+    static uint16_t transmit_tick = 0;
+    if (transmit_tick++ >= GAME_TICKS) {
+        transmit_shot(player->shots, player->num_shots, player_number);
+        transmit_tick = 0;
+    }
+}
+
+
+static void receive(Player* player, int player_number)
+{
+    static uint16_t receive_tick = 0;
+    if (receive_tick++ >= RECEIVE_TICKS) {
+        receive_shot(player, player_number);
+        receive_tick = 0;
+    }
+}
+
+
+int main(void)
+{
+    initialise_everything();
+    DDRC |= (1 << 2);
+
+    int player_number = get_player_number();
+    pacer_init(REFRESH_RATE);
+    show_player_number(player_number);
 
     Player player = new_player();
 
@@ -53,26 +90,11 @@ int main(void)
         pacer_wait();
         navswitch_update();
 
-        move_player(&player);
-        player_shoot(&player);
-        show_player(&player);
+        update_player(&player);
         show_shots(player.shots, player.num_shots);
 
-        if (transmit_tick++ >= GAME_TICKS) {
-            transmit_shot(player.shots, player.num_shots, player_number);
-            transmit_tick = 0;
-        }
-
-        if (receive_tick++ >= RECEIVE_TICKS) {
-            receive_shot(&player, player_number);
-            receive_tick = 0;
-        }
-
-        if (shot_update_tick++ >= GAME_TICKS) {
-            //shot_collision(&player);
-            update_shots(player.shots, player.num_shots);
-            refresh_shots(&player);
-            shot_update_tick = 0;
-        }
+        transmit(&player, player_number);
+        receive(&player, player_number);
+        update_game(&player);
     }
 }

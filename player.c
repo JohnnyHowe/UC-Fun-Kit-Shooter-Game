@@ -16,6 +16,14 @@ Player new_player(void)
 }
 
 
+void update_player(Player* player)
+{
+    move_player(player);
+    player_shoot(player);
+    show_player(player);
+}
+
+
 void move_player(Player* player)
 {
     /** Given a pointer to a Player, increase or decrese its x coordinate

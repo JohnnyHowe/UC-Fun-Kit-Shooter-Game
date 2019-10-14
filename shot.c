@@ -20,7 +20,7 @@ void transmit_shot(Shot* shots, int num_shots, int player_number)
     int x_pos = pos_to_transmit(shots, num_shots);
     if (x_pos != -1) {
         uint8_t message = x_pos;
-        message |= (player_number << 5);
+        message |= (player_number << 7);
         ir_uart_putc(message);
     }
 }
@@ -69,7 +69,7 @@ int pos_to_transmit(Shot* shots, int num_shots)
     int i = 0;
     while (i < num_shots && x_pos == -1)
     {
-        if (shots[i].direction == 1 && shots[i].y_pos == 5) {
+        if (shots[i].direction == 1 && shots[i].y_pos == 6) {
             x_pos = shots[i].x_pos;
         }
         i ++;
@@ -85,8 +85,8 @@ Shot process_shot(int player_number)
      * it. If not, return a shot with -1 x position. */
     Shot shot = {-1, 6, -1};
     int message = receive_value();
-    int incoming_player_num = check_bit(message, 5);
-    message &= ~(1 << 5);
+    int incoming_player_num = check_bit(message, 7);
+    message &= ~(1 << 7);
     int x_pos = message;
 
     if (x_pos >= 0 && x_pos <= 4 && incoming_player_num != player_number) {

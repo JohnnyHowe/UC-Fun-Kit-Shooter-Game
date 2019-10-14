@@ -14,8 +14,9 @@
 #include "game_display.h"
 
 
-#define REFRESH_RATE 1000
-#define GAME_TICKS 300
+#define REFRESH_RATE 500
+#define GAME_TICKS 100
+#define RECEIVE_TICKS (GAME_TICKS / 2)
 
 int main(void)
 {
@@ -44,7 +45,7 @@ int main(void)
 
     uint16_t shot_update_tick = 0;
     uint16_t transmit_tick = 0;
-    uint16_t receive_tick = GAME_TICKS / 2;
+    uint16_t receive_tick = 0;
 
     Player player = new_player();
 
@@ -62,7 +63,7 @@ int main(void)
             transmit_tick = 0;
         }
 
-        if (receive_tick++ >= GAME_TICKS) {
+        if (receive_tick++ >= RECEIVE_TICKS) {
             receive_shot(&player, player_number);
             receive_tick = 0;
         }

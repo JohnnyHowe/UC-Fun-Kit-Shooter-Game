@@ -58,7 +58,7 @@ int can_shoot(Shot* shots, int num_shots)
     int shot_okay = 1;
     int i = 0;
     while (i < num_shots && shot_okay) {
-        if (shots[i].direction > 0 && (shots[i].y_pos == 2 || shots[i].y_pos == 1)) {
+        if (shots[i].direction > 0 && (shots[i].y_pos == 1 || shots[i].y_pos == 2)) {
             shot_okay = 0;
         }
         i ++;

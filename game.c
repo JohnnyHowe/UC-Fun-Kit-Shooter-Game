@@ -11,7 +11,7 @@
 
 
 #define REFRESH_RATE 1000
-#define GAME_TICKS (REFRESH_RATE / 6)    // How many loops must pass for the game to update?
+#define GAME_TICKS REFRESH_RATE / 6   // How many loops must pass for the game to update?
 
 int main(void)
 {

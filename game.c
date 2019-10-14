@@ -50,6 +50,13 @@ static void update_game(Player* player)
         //shot_collision(&player);
         update_shots(player->shots, player->num_shots);
         refresh_shots(player);
+
+        if (is_hit(player)) {
+            PORTC |= (1 << 2);
+        } else {
+            PORTC &= ~(1 << 2);
+        };
+
         shot_update_tick = 0;
     }
 }

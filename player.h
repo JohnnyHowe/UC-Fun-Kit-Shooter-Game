@@ -34,3 +34,4 @@ int shots_collided(Shot* shot1, Shot* shot2);
 
 void update_player(Player* player);
 
+int is_hit(Player* player);

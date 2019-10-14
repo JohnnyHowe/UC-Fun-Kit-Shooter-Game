@@ -16,6 +16,20 @@ Player new_player(void)
 }
 
 
+int is_hit(Player* player)
+{
+    int hit = 0;
+    int i = 0;
+    while (i < player->num_shots && !hit) {
+        if (player->shots[i].y_pos == 0 && player->shots[i].x_pos == player->x_pos) {
+            hit = 1;
+        }
+        i ++;
+    }
+    return hit;
+}
+
+
 void update_player(Player* player)
 {
     move_player(player);

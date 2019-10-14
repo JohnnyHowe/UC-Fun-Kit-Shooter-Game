@@ -57,7 +57,7 @@ int can_shoot(Shot* shots, int num_shots)
     int shot_okay = 1;
     int i = 0;
     while (i < num_shots && shot_okay) {
-        if (shots[i].direction > 0 && (shots[i].y_pos == 3 || shots[i].y_pos == 2)) {
+        if (shots[i].direction > 0 && (shots[i].y_pos == 2 || shots[i].y_pos == 1)) {
             shot_okay = 0;
         }
         i ++;
@@ -89,7 +89,6 @@ void show_player(Player* player)
 void refresh_shots(Player* player)
 {
     /* Remove the invalid shots (y > 4) and shuffle the valid ones down */
-    //shot_collision(player);
     int i = 0;
     int j = 0;
     while (i < player->num_shots) {
@@ -100,6 +99,7 @@ void refresh_shots(Player* player)
         i ++;
     }
     player->num_shots = j;
+    shot_collision(player);
 }
 
 
@@ -107,28 +107,6 @@ void shot_collision(Player* player)
 {
     /** If two shots have collided, set their y_pos to -1 and their
      * direction to 0 so the refresh_shots function gets rid
-     * of them.
-     * FUNCTION IS NASTY PLEASE MAKE MORE EFFICIENT */
-    int i = 0;
-    int j = 0;
-    while (i < player->num_shots) {
-        while (j < player->num_shots) {
-            if (player->shots[i].direction + player->shots[j].direction == 0) {
-                if (player->shots[i].x_pos == player->shots[j].x_pos) {
-                    if (player->shots[i].y_pos == player->shots[j].y_pos ||
-                    player->shots[i].y_pos == player->shots[j].y_pos + 1 ||
-                    player->shots[i].y_pos == player->shots[j].y_pos - 1) {
-                        // they have collided
-                        player->shots[i].y_pos = -1;
-                        player->shots[i].direction = 0;
-                        player->shots[j].y_pos = -1;
-                        player->shots[j].direction = 0;
-                    }
-                }
-            }
-            j++;
-        }
-        i++;
-    }
+     * of them. */
 }
 

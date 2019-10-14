@@ -11,7 +11,7 @@
 
 
 #define REFRESH_RATE 1000
-#define GAME_TICKS REFRESH_RATE / 6   // How many loops must pass for the game to update?
+#define GAME_TICKS 200
 
 int main(void)
 {
@@ -21,7 +21,7 @@ int main(void)
     initialise_ir();
 
     pacer_init(REFRESH_RATE);
-    uint8_t shot_update_tick = 0;
+    uint16_t shot_update_tick = 0;
 
     DDRC |= (1 << 2);
 

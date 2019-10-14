@@ -51,7 +51,7 @@ int pos_to_transmit(Shot* shots, int num_shots)
     int i = 0;
     while (i < num_shots && x_pos == -1)
     {
-        if (shots[i].direction == 1 && shots[i].y_pos == 0) {
+        if (shots[i].direction == 1 && shots[i].y_pos == 6) {
             x_pos = shots[i].x_pos;
         }
         i ++;

@@ -1,10 +1,9 @@
 /** Functions to help with communications between the two devices.
  *
- * Communication is done with 8 bit binary numbers in the form 0bSCN
- * S (7): Player setting mode. If S = 1 then we are setting the player numbers.
- * C (6):   If S = 1:   Stage of player set mode. 0 = waiting for reply, 1 = confirming number.
- *          If S = 0:   Player setting mode complete (0 = not done, 1 = complete).
- * N (5): Player number being taken by unit transmitting message.
+ * Communications are done with 8 bit numbers.
+ * Bit 7: Player signature/number - prevent unit from reading its own signal.
+ * Bit 5: Victory? (1 = other player just won, 0 otherwise).
+ * Last 3 bits represent the x position of the incoming shot if bit 5 = 0.
  *
  * Includes: initialise_ir, transmit_shot, receive_value
  * Jonathon Howe, Tomoya Sakai 14/10/2019
@@ -26,10 +25,7 @@
 
 void initialise_ir(void)
 {
-    /** Initialising the infrared driver
-     * Parameters: None
-     * Outputs: None
-     * */
+    /** Initialise the infrared driver */
     ir_uart_init();
 }
 
@@ -38,7 +34,8 @@ int receive_value(void)
 {
     /** Return (int) the x position of the incoming shot transmitted by
      * the other player. This function (calls another function to)
-     * properly decode the message. */
+     * properly decode the message. If there is no incoming message,
+     * return -1. */
     int message = -1;
     if (ir_uart_read_ready_p()) {
         message = ir_uart_getc();
@@ -62,7 +59,8 @@ int check_bit(int number, int bit)
 
 int get_player_number(void)
 {
-    /** talk to the other unit and decide what player is 0 and 1 */
+    /** Return the player number (0 or 1). Unit talks to other unit and
+     * decides what unit is player 0 and player 1. */
     int player_num = 2;
     int done = 0;
     pacer_init(20);

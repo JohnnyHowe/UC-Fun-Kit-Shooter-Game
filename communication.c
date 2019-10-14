@@ -6,7 +6,10 @@
 
 void initialise_ir(void)
 {
-    /** Initialising the infrared driver */
+    /** Initialising the infrared driver
+     * Parameters: None
+     * Outputs: None
+     * */
     ir_uart_init();
 }
 
@@ -16,7 +19,7 @@ void transmit_shot(Shot* shots, int num_shots)
     /** Given the array of shots, check to see if any are ready to be
      * transmitted to the other kit (if x_pos = -1) and if so, transmit.
      * Parameters: shots, num_shots.
-     *  Outputs: IR communication to other device
+     * Outputs: IR communication to other device
      * */
     int x_pos = pos_to_transmit(shots, num_shots);
     if (x_pos != -1) {
@@ -26,7 +29,10 @@ void transmit_shot(Shot* shots, int num_shots)
 
 int receive_value(void)
 {
-    /** Recieve and return the signal transmitted by the other ATMega32u2 */
+    /** Recieve and return the signal transmitted by the other ATMega32u2
+     * Parameters: None
+     * Output: Receives IR signal iff (ir_uart_read_ready_p() returns True
+     * */
     int x_pos = -1;
     if (ir_uart_read_ready_p()) {
         x_pos = ir_uart_getc();

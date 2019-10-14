@@ -34,6 +34,7 @@ void display_score(int score)
     while (i++ < 500) {
         pacer_wait();
         tinygl_update();
+        display_character(score + 0 + '0');
     }
 }
 
@@ -47,23 +48,6 @@ void initialise_everything(void)
 
     tinygl_init(REFRESH_RATE);
     tinygl_font_set(&font5x7_1);
-    //tinygl_text_speed_set(1);
-    DDRC |= (1 << 2);
-    DDRD &= ~(1 << 7);
-    //tinygl_text_dir_set(TINYGL
-}
-
-
-void show_player_number(int player_number)
-{
-    display_character('0' + player_number);
-    tinygl_update();
-    for (uint16_t i = 0; i < REFRESH_RATE * 5; i++) {
-        //display_character('0' + player_number);
-        pacer_wait();
-        //tinygl_update ();
-    }
-    clear_display();
 }
 
 
@@ -104,8 +88,7 @@ static void receive(Player* player, int player_number, int* score)
         if (value != -1) {
             uint8_t message = value;
             if (check_bit(message, 5) == 1) {
-                (*score) ++;
-                PORTC |= (1 << 2);
+                *score = (*score + 1) % 10;
                 display_score(*score);
                 reset(player);
             } else {
@@ -126,7 +109,6 @@ int main(void)
 
     pacer_init(REFRESH_RATE);
     // show_player_number(player_number);
-    // display_score(score);
 
     Player player = new_player();
     reset(&player);

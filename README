@@ -4,7 +4,7 @@ How to play "Shooty Shooty Bang Bang™"
              Start-Up
 =====================================
 
-1. Plug kits into computer via micro usb. If the green LED lights up, it has been plugged in.
+1. Plug kits into computer via micro usb. If the green LED lights up, it has been plugged in.p member names in Make
 
 2. Run the "make program" command in the terminal in the game directory and the centre LED in the LED matrix should start flashing.
 

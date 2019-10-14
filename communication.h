@@ -1,7 +1,7 @@
 #include "ir_uart.h"
 
-void transmit(Shot* shots, int num_shots);
+void transmit_shot(Shot* shots, int num_shots);
 
 void initialise_ir(void);
 
-int recieve(void);
+int receive_value(void);

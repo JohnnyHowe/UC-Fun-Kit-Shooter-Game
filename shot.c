@@ -2,10 +2,26 @@
  * Includes:
  * Jonathon Howe 12/10/2019
 */
-#include "shot.h"
-#include "display.h"
 #include <avr/io.h> // Just for debugging things
+
+#include "shot.h"
+#include "game_display.h"
+#include "ir_uart.h"
 #include "communication.h"
+
+
+void transmit_shot(Shot* shots, int num_shots)
+{
+    /** Given the array of shots, check to see if any are ready to be
+     * transmitted to the other kit (if x_pos = -1) and if so, transmit.
+     * Parameters: shots, num_shots.
+     * Outputs: IR communication to other device
+     * */
+    int x_pos = pos_to_transmit(shots, num_shots);
+    if (x_pos != -1) {
+        ir_uart_putc(x_pos);
+    }
+}
 
 
 void show_shot(Shot* shot)
@@ -51,7 +67,7 @@ int pos_to_transmit(Shot* shots, int num_shots)
     int i = 0;
     while (i < num_shots && x_pos == -1)
     {
-        if (shots[i].direction == 1 && shots[i].y_pos == 6) {
+        if (shots[i].direction == 1 && shots[i].y_pos == 5) {
             x_pos = shots[i].x_pos;
         }
         i ++;

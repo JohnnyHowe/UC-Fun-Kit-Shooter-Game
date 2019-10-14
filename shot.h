@@ -12,6 +12,7 @@ typedef struct {
 
 // Shot NULL_SHOT = {-1, -1, 0};
 
+void transmit_shot(Shot* shots, int num_shots);
 
 void show_shot(Shot* shot);
 

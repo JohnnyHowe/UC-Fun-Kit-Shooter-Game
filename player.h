@@ -29,3 +29,5 @@ void receive_shot(Player* player);
 void refresh_shots(Player* player);
 
 void shot_collision(Player* player);
+
+int shots_collided(Shot* shot1, Shot* shot2);

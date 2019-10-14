@@ -2,6 +2,7 @@
  * Includes: move_player, show_player
  * Jonathon Howe 12/10/2019 */
 #include <avr/io.h> // Just for debugging things
+#include <stdlib.h>
 #include "player.h"
 #include "navswitch.h"
 #include "display.h"
@@ -10,7 +11,7 @@
 Player new_player(void)
 {
     /** Make and return a Player with the default attribute values. */
-    Player player = {3, {}, 0};
+    Player player = {2, {}, 0};
     return player;
 }
 
@@ -57,7 +58,7 @@ int can_shoot(Shot* shots, int num_shots)
     int shot_okay = 1;
     int i = 0;
     while (i < num_shots && shot_okay) {
-        if (shots[i].direction > 0 && (shots[i].y_pos == 2 || shots[i].y_pos == 1)) {
+        if (shots[i].direction > 0 && (shots[i].y_pos == 1 || shots[i].y_pos == 1)) {
             shot_okay = 0;
         }
         i ++;
@@ -108,5 +109,38 @@ void shot_collision(Player* player)
     /** If two shots have collided, set their y_pos to -1 and their
      * direction to 0 so the refresh_shots function gets rid
      * of them. */
+    int i = 0;
+    int j = 0;
+    while (i < player->num_shots) {
+        while (j < player->num_shots) {
+            if (shots_collided(&(player->shots[i]), &(player->shots[j]))) {
+                // player->shots[i] = NULL_SHOT;
+                // player->shots[j] = NULL_SHOT;
+                set_null_shot(&(player->shots[i]));
+                set_null_shot(&(player->shots[j]));
+                //player->shots[i].direction = 0;
+                //player->shots[j].direction = 0;
+                //player->shots[i].x_pos = -1;
+                //player->shots[j].x_pos = -1;
+            }
+            j ++;
+        }
+        i ++;
+    }
+}
+
+
+int shots_collided(Shot* shot1, Shot* shot2)
+{
+    /** return whether the 2 shots have just collided. */
+    int collided = 0;
+    if (shot1->direction + shot2->direction == 0) {
+        if (shot1->x_pos == shot2->x_pos) {
+            if (abs(shot1->y_pos - shot2->y_pos) <= 1) {
+                collided = 1;
+            }
+        }
+    }
+    return collided;
 }
 

@@ -10,6 +10,8 @@ typedef struct {
     int direction;  // 1 = Towards player, -1 = away from player
 } Shot;
 
+// Shot NULL_SHOT = {-1, -1, 0};
+
 
 void show_shot(Shot* shot);
 
@@ -22,3 +24,5 @@ void update_shots(Shot* shots, int num_shots);
 int pos_to_transmit(Shot* shots, int num_shots);
 
 Shot process_shot(void);
+
+void set_null_shot(Shot* shot);

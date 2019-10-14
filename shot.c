@@ -72,3 +72,12 @@ Shot process_shot(void)
     }
     return shot;
 }
+
+
+void set_null_shot(Shot* shot)
+{
+    /** Set the direction to zero and the pos to (-1, -1) */
+    shot->x_pos = -1;
+    shot->x_pos = -1;
+    shot->direction = 0;
+}

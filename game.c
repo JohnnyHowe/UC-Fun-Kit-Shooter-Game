@@ -11,7 +11,7 @@
 
 
 #define REFRESH_RATE 1000
-#define GAME_TICKS 200
+#define GAME_TICKS 1000
 
 int main(void)
 {
@@ -37,6 +37,7 @@ int main(void)
         show_shots(player.shots, player.num_shots);
 
         if (shot_update_tick++ >= GAME_TICKS) {
+            //shot_collision(&player);
             update_shots(player.shots, player.num_shots);
             transmit_shot(player.shots, player.num_shots);
             receive_shot(&player);

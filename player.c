@@ -1,5 +1,4 @@
 /** A bunch of helper functions for the player.
- * Includes: move_player, show_player
  * Jonathon Howe 12/10/2019 */
 #include <avr/io.h> // Just for debugging things
 #include <stdlib.h>

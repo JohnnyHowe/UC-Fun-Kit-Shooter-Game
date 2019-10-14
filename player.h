@@ -1,6 +1,5 @@
 /** Player struct and helper function definitions.
- * Jonathon Howe 12/10/2019
-*/
+ * Jonathon Howe 12/10/2019 */
 #include "shot.h"
 
 

@@ -1,5 +1,4 @@
 /** A bunch of helper functions for the shot struct thing.
- * Includes:
  * Jonathon Howe 12/10/2019
 */
 #include <avr/io.h> // Just for debugging things

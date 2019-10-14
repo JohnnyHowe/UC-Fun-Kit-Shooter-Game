@@ -1,5 +1,4 @@
 /** Display helper functions.
- * Includes: display_column, initialise_display
  * Jonathon Howe, Tomoya Sakai 12/10/2019
 */
 #include "navswitch.h"
@@ -10,6 +9,8 @@
 
 void display_character (char character)
 {
+    /** Call tinygl_text with the character null terminated.
+     * character (char): Character to show. */
     char buffer[2];
     buffer[0] = character;
     buffer[1] = '\0';
@@ -22,8 +23,8 @@ void display_column (uint8_t row_pattern, uint8_t current_column)
     /** Set the pattern on the LED matrix in column current_column (int
      * in range 0 to 4 (inclusive)) to row_pattern (integer that in
      * binary represents the LED pattern.
-     * Parameters */
-
+     * row_pattern (uint8_t): Binary number representing the row pattern to use.
+     * current_column (uint8_t): What column to put the row pattern in. */
     static int last_col = 0;
     pio_output_high(cols[last_col]);
 

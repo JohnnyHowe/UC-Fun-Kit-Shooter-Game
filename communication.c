@@ -5,7 +5,6 @@
  * Bit 5: Victory? (1 = other player just won, 0 otherwise).
  * Last 3 bits represent the x position of the incoming shot if bit 5 = 0.
  *
- * Includes: initialise_ir, transmit_shot, receive_value
  * Jonathon Howe, Tomoya Sakai 14/10/2019
  */
 #include <stdlib.h>

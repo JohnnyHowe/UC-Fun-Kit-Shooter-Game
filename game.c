@@ -58,12 +58,12 @@ int main(void)
         show_shots(player.shots, player.num_shots);
 
         if (transmit_tick++ >= GAME_TICKS) {
-            transmit_shot(player.shots, player.num_shots);
+            transmit_shot(player.shots, player.num_shots, player_number);
             transmit_tick = 0;
         }
 
         if (receive_tick++ >= GAME_TICKS) {
-            receive_shot(&player);
+            receive_shot(&player, player_number);
             receive_tick = 0;
         }
 

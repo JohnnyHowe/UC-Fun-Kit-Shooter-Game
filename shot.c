@@ -10,7 +10,7 @@
 #include "communication.h"
 
 
-void transmit_shot(Shot* shots, int num_shots)
+void transmit_shot(Shot* shots, int num_shots, int player_number)
 {
     /** Given the array of shots, check to see if any are ready to be
      * transmitted to the other kit (if x_pos = -1) and if so, transmit.
@@ -19,7 +19,9 @@ void transmit_shot(Shot* shots, int num_shots)
      * */
     int x_pos = pos_to_transmit(shots, num_shots);
     if (x_pos != -1) {
-        ir_uart_putc(x_pos);
+        uint8_t message = x_pos;
+        message |= (player_number << 5);
+        ir_uart_putc(message);
     }
 }
 
@@ -76,14 +78,18 @@ int pos_to_transmit(Shot* shots, int num_shots)
 }
 
 
-Shot process_shot(void)
+Shot process_shot(int player_number)
 {
     /* If a value between 0 and 6 (inclusive) is received by the IR
      * sensor, use it as the x coordinate for a new shot, and return
      * it. If not, return a shot with -1 x position. */
     Shot shot = {-1, 6, -1};
-    int x_pos = receive_value();
-    if (x_pos >= 0 && x_pos <= 4) {
+    int message = receive_value();
+    int incoming_player_num = check_bit(message, 5);
+    message &= ~(1 << 5);
+    int x_pos = message;
+
+    if (x_pos >= 0 && x_pos <= 4 && incoming_player_num != player_number) {
         shot.x_pos = 4 - x_pos;
     }
     return shot;

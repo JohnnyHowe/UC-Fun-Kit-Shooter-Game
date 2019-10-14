@@ -12,7 +12,7 @@ typedef struct {
 
 // Shot NULL_SHOT = {-1, -1, 0};
 
-void transmit_shot(Shot* shots, int num_shots);
+void transmit_shot(Shot* shots, int num_shots, int player_number);
 
 void show_shot(Shot* shot);
 
@@ -24,6 +24,6 @@ void update_shots(Shot* shots, int num_shots);
 
 int pos_to_transmit(Shot* shots, int num_shots);
 
-Shot process_shot(void);
+Shot process_shot(int player_number);
 
 void set_null_shot(Shot* shot);

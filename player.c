@@ -67,11 +67,11 @@ int can_shoot(Shot* shots, int num_shots)
 }
 
 
-void receive_shot(Player* player)
+void receive_shot(Player* player, int player_number)
 {
     /* If a shot is received from the IR sensor, add it to the
      * player.shot array. */
-    Shot shot = process_shot();
+    Shot shot = process_shot(player_number);
     if (player->num_shots < MAX_SHOTS && shot.x_pos != -1) {
         player->shots[player->num_shots] = shot;
         player->num_shots ++;

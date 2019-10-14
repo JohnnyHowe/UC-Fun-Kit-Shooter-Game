@@ -1,6 +1,5 @@
 /** Display functions and rows and cols array definitions.
- * Jonathon Howe 12/10/2019
-*/
+ * Jonathon Howe 12/10/2019 */
 #include "pio.h"
 
 

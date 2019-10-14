@@ -11,7 +11,7 @@
 
 Player new_player(void)
 {
-    /** Make and return a Player with the default attribute values. */
+    /** Return a new Player with the default attribute values. (2, {}, 0)*/
     Player player = {2, {}, 0};
     return player;
 }
@@ -19,6 +19,9 @@ Player new_player(void)
 
 int is_hit(Player* player)
 {
+    /** Return whether the player it hit. If any shot in player.shot is
+     * in the same spot as the player.
+     * player (Player*): Player to check. */
     int hit = 0;
     int i = 0;
     while (i < player->num_shots && !hit) {
@@ -33,6 +36,8 @@ int is_hit(Player* player)
 
 void update_player(Player* player)
 {
+    /** Update the player - move, shoot and shot
+     * player (Player*): Pointer to player to update. */
     move_player(player);
     player_shoot(player);
     show_player(player);
@@ -41,9 +46,8 @@ void update_player(Player* player)
 
 void move_player(Player* player)
 {
-    /** Given a pointer to a Player, increase or decrese its x coordinate
-     * (pos) if the navswitch is pushed north or south repectively
-     * if it will stay on screen (in range 0 to 6 (inclusive) */
+    /** Move the player if the navswitch is pushed east or west.
+     * player (Player*): Pointer to player to move. */
 
     if (navswitch_push_event_p (NAVSWITCH_EAST) && player->x_pos < 4) {
         player->x_pos += 1;
@@ -55,8 +59,9 @@ void move_player(Player* player)
 
 Shot new_shot(Player* player)
 {
-    /** Given the pointer to the player that clicked the shoot button,
-     * create a new shot at (player.x_pos, 3) */
+    /** Return a new shot at the same x position as the player and y = 1
+     * with a direction away from the player (1)
+     * player (Player*): Pointer to player that made the shot. */
     Shot shot = {player->x_pos, 1, 1};
     return shot;
 }
@@ -64,15 +69,17 @@ Shot new_shot(Player* player)
 
 int shoot_button(void)
 {
+    /** Return whether the shoot button(s) have been pressed.
+     * navswitch push or white button. */
     return ((PIND & (1 << 7)) != 0) || navswitch_push_event_p(NAVSWITCH_PUSH);
 }
 
 
 void player_shoot(Player* player)
 {
-    /** Given a Player pointer, add a Shot to player.shots in the nav
-     * button is pressed and the player has less than 10 shots. */
-    //if (navswitch_push_event_p(NAVSWITCH_PUSH) && can_shoot(player->shots, player->num_shots)) {
+    /** Add a new shot to player.shots if the button is pressed and
+     * can_shoot returns 1
+     * player (Player*): The player to (maybe) shoot from */
     if (shoot_button() && can_shoot(player->shots, player->num_shots)) {
         player->shots[player->num_shots] = new_shot(player);
         player->num_shots++;
@@ -82,9 +89,11 @@ void player_shoot(Player* player)
 
 int can_shoot(Shot* shots, int num_shots)
 {
-    /* Given an array of shots, check whether the player can shoot.
-     * so num_shots < maxShots and the most recent outgoing shot is not
-     * in the first or second position (column 2 and 3) */
+    /** Return whether the player can shoot. If the number of shots is
+     * less than MAX_SHOTS and it has been at least 3 game ticks since
+     * the last time this player shot.
+     * shots (Shot*): The players array of shots.
+     * num_shots (int): length of shots. */
     int shot_okay = 1;
     int i = 0;
     while (i < num_shots && shot_okay) {
@@ -99,8 +108,10 @@ int can_shoot(Shot* shots, int num_shots)
 
 void receive_shot(Player* player, int player_number, uint8_t message)
 {
-    /* If a shot is received from the IR sensor, add it to the
-     * player.shot array. */
+    /** Add a shot to player.shots if one is received from the IR sensor.
+     * player (Player*): Pointer to player to receive shot.
+     * player_number (int): Player/unit number.
+     * message (uint8_t): Message received from the IR sensor. */
     Shot shot = process_shot(player_number, message);
     if (player->num_shots < MAX_SHOTS && shot.x_pos != -1) {
         player->shots[player->num_shots] = shot;
@@ -111,15 +122,17 @@ void receive_shot(Player* player, int player_number, uint8_t message)
 
 void show_player(Player* player)
 {
-    /** Given the pointer to a Player, light the LED in columm 4 and the
-     * row corresponding to the player x pos (player.pos). */
+    /** Show the player int row 0, column = player.x_pos.
+     * player (Player*): Pointer to player to show. */
     display_column(1, player->x_pos);
 }
 
 
 void refresh_shots(Player* player)
 {
-    /* Remove the invalid shots (y > 4) and shuffle the valid ones down */
+    /** Remove invalid shots (y < 0 or y > 6) bu shuffling valid shots
+     * down and decreasing player.num_shots (if there are invalid shots).
+     * player (Player*): Pointer to player with shots array to refresh. */
     int i = 0;
     int j = 0;
     while (i < player->num_shots) {
@@ -130,53 +143,13 @@ void refresh_shots(Player* player)
         i ++;
     }
     player->num_shots = j;
-    // shot_collision(player);
-}
-
-
-void shot_collision(Player* player)
-{
-    /** If two shots have collided, set their y_pos to -1 and their
-     * direction to 0 so the refresh_shots function gets rid
-     * of them. */
-    int i = 0;
-    int j = 0;
-    while (i < player->num_shots) {
-        while (j < player->num_shots) {
-            if (shots_collided(&(player->shots[i]), &(player->shots[j]))) {
-                // player->shots[i] = NULL_SHOT;
-                // player->shots[j] = NULL_SHOT;
-                set_null_shot(&(player->shots[i]));
-                set_null_shot(&(player->shots[j]));
-                //player->shots[i].direction = 0;
-                //player->shots[j].direction = 0;
-                //player->shots[i].x_pos = -1;
-                //player->shots[j].x_pos = -1;
-            }
-            j ++;
-        }
-        i ++;
-    }
-}
-
-
-int shots_collided(Shot* shot1, Shot* shot2)
-{
-    /** return whether the 2 shots have just collided. */
-    int collided = 0;
-    if (shot1->direction + shot2->direction == 0) {
-        if (shot1->x_pos == shot2->x_pos) {
-            if (abs(shot1->y_pos - shot2->y_pos) <= 1) {
-                collided = 1;
-            }
-        }
-    }
-    return collided;
 }
 
 
 void transmit_hit(int player_number)
 {
+    /** Transmit a signal with bit 5 active (saying i've been hit).
+     * player_number (int): Unit/player number. */
     uint8_t message = 0;
     message |= (player_number << 7);
     message |= (1 << 5);
